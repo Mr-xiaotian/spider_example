@@ -1,4 +1,4 @@
-import httpx
+import httpx, re
 import pandas as pd
 from tqdm import tqdm
 from selenium import webdriver
@@ -77,10 +77,18 @@ class ZhiSeleSpider:
     def get_ab_key(self, url):
         # 发送GET请求并解析页面内容
         response = httpx.get(url, headers=headers)
-        # parser = etree.HTMLParser()
-        # tree = etree.fromstring(response.text, parser)
+        parser = etree.HTMLParser()
+        tree = etree.fromstring(response.text, parser)
         soup = BeautifulSoup(response.text, 'html.parser')
         result = {}
+
+        author_tag = tree.xpath('//*[@id="authorpart"]')
+        author = author_tag[0].xpath('string()').strip() if author_tag else ""
+        result['作者'] = re.sub(r"\s+", ";", author)
+
+        author_source_tag = tree.xpath('/html/body/div[2]/div[1]/div[3]/div/div[3]/div[1]/div/h3[2]')
+        author_source = author_source_tag[0].xpath('string()').strip() if author_source_tag else ""
+        result['作者单位'] = re.sub(r"\s+", ";", author_source)
 
         # 提取摘要
         abstract_tag = soup.find('span', {'id': 'ChDivSummary'})
@@ -93,22 +101,25 @@ class ZhiSeleSpider:
         result['关键词'] = keywords.replace(';;', ';')
 
         # 提取基金资助 (如果需要的话，可以取消注释)
-        # fund_tag = tree.xpath('//p[@class="funds"]')
-        # fund = fund_tag[0].xpath('string()').strip() if fund_tag else ""
-        # result['基金资助'] = fund.replace('; ', '')
+        fund_tag = tree.xpath('//p[@class="funds"]')
+        fund = fund_tag[0].xpath('string()').strip() if fund_tag else ""
+        result['基金资助'] = re.sub(r"\s+", "", fund)
 
         # # 提取 "DOI", "专辑", "分类号" 的内容
-        # album_tag = soup.find('span', string='专辑：')
+        album_tag = soup.find('span', string='专辑：')
         special_tag = soup.find('span', string='专题：')
-        # classification_number_tag = soup.find('span', string='分类号：')
+        classification_number_tag = soup.find('span', string='分类号：')
+        publis_time_tag = soup.find('span', string='在线公开时间：')
 
-        # album = album_tag.find_next('p').text.strip() if album_tag else ""
+        album = album_tag.find_next('p').text.strip() if album_tag else ""
         special = special_tag.find_next('p').text.strip() if special_tag else ""
-        # classification_number = classification_number_tag.find_next('p').text.strip() if classification_number_tag else ""
+        classification_number = classification_number_tag.find_next('p').text.strip() if classification_number_tag else ""
+        publis_time = publis_time_tag.find_next('p').text.strip() if publis_time_tag else ""
 
-        # result['专辑'] = album
+        result['专辑'] = album
         result['专题'] = special
-        # result['分类号'] = classification_number
+        result['分类号'] = classification_number
+        result['在线公开时间'] = publis_time
 
         return result
 
@@ -155,7 +166,7 @@ class ZhiSeleSpider:
                 title_tag = literature.find_element(By.CSS_SELECTOR, '.name a')
                 title = title_tag.text or ''
                 paper_link = title_tag.get_attribute('href') or ''
-                author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
+                # author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
                 source_item = literature.find_element(By.CSS_SELECTOR, '.source')
                 source = source_item.text or ''
                 # surce_child = source_item.find_element(By.CSS_SELECTOR, 'a') or ''
@@ -165,14 +176,14 @@ class ZhiSeleSpider:
                 quote = literature.find_element(By.CSS_SELECTOR, '.quote').text or ''
                 download = literature.find_element(By.CSS_SELECTOR, '.download').text or ''
                 
-                info['标题'] = title
-                info['作者'] = author
-                info['期刊名称'] = source
+                info['题目'] = title
+                # info['作者'] = author
+                info['来源期刊'] = source
                 # info['paper_type'] = data
                 info['发表时间'] = date
                 info['下载次数'] = download or 0
-                info['被引次数'] = quote or 0
-                # info['link'] = url
+                # info['被引次数'] = quote or 0
+                info['详情页链接'] = paper_link
                 # info['Source URL'] = surce_url
 
                 # 获取摘要和关键词等
@@ -243,15 +254,23 @@ class ZhiSeleSpider:
         return self.error_list
 
     def save_info_to_csv(self, name):
-        index_list = ['作者', '标题', '摘要', '关键词', '被引次数', '下载次数', '期刊名称', '发表时间', '专题']
+        index_list = ['题目', '作者', '作者单位','摘要', '关键词', '基金资助', 
+                      '专辑', '专题', '分类号', '在线公开时间', 
+                      '下载次数', '来源期刊', '详情页链接', '发表时间']
         df = pd.DataFrame(clean_data(self.literature_info), columns=index_list)
-        print(len(df))
+        print(f"{len(df)}条数据")
+
+        # 按发表时间降序排序
+        df = df.sort_values(by='发表时间', ascending=False)
+        # 移除发表时间列（若不需保留）
+        df = df.drop(columns=['发表时间'])
 
         # df = df.drop_duplicates()
-        df['被引次数'] = df['被引次数'].replace('', pd.NA).fillna(0)
+        # df['被引次数'] = df['被引次数'].replace('', pd.NA).fillna(0)
         df['下载次数'] = df['下载次数'].replace('', pd.NA).fillna(0)
 
         df.to_csv(f'{name}.csv', index=False, encoding='utf-8-sig')
+        self.init_list()
         return df.head(5)
 
 def clean_data(literature_info):
