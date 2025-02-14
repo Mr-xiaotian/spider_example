@@ -1,15 +1,16 @@
 import httpx, re
 import pandas as pd
 from tqdm import tqdm
-from selenium import webdriver
 from bs4 import BeautifulSoup
 from lxml import etree
 from time import sleep
 from bs4 import BeautifulSoup
+from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.edge.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
@@ -34,7 +35,8 @@ headers = {
 
 class ZhiSeleSpider:
     def __init__(self):
-        self.driver = webdriver.Edge()
+        options = Options()
+        self.driver = webdriver.Edge(options=options)
 
     def init_list(self):
         self.literature_info = []
