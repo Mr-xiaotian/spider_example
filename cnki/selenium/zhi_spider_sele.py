@@ -322,22 +322,20 @@ class ZhiSeleSpider:
         return self.error_list
 
     def save_info_to_csv(self, name):
-        index_list = ['题目', '作者', '作者单位','摘要', '关键词', '基金资助', 
-                      '专辑', '专题', '分类号', '在线公开时间', 
-                      '下载次数', '来源期刊', '详情页链接', '发表时间']
+        index_list = ['题目', '详情页链接', '参考文献']
         df = pd.DataFrame(clean_data(self.literature_info), columns=index_list)
         print(f"{len(df)}条数据")
 
-        # 按发表时间降序排序
-        df = df.sort_values(by='发表时间', ascending=False)
-        # 移除发表时间列（若不需保留）
-        df = df.drop(columns=['发表时间'])
+        # # 按发表时间降序排序
+        # df = df.sort_values(by='发表时间', ascending=False)
+        # # 移除发表时间列（若不需保留）
+        # df = df.drop(columns=['发表时间'])
 
         # df = df.drop_duplicates()
         # df['被引次数'] = df['被引次数'].replace('', pd.NA).fillna(0)
-        df['下载次数'] = df['下载次数'].replace('', pd.NA).fillna(0)
+        # df['下载次数'] = df['下载次数'].replace('', pd.NA).fillna(0)
 
-        df.to_csv(f'{name}.csv', index=False, encoding='utf-8-sig')
+        df.to_csv(f'{name}(参考文献).csv', index=False, encoding='utf-8-sig')
         self.init_list()
         return df.head(5)
 
