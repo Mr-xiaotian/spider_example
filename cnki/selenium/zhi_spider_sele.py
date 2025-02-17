@@ -272,8 +272,9 @@ class ZhiSeleSpider:
         journal_w_list = self.get_refer_text('国际期刊', '#nxgp-kcms-data-ref-references-journal-w')
         crldeng_list = self.get_refer_text('中外文题录', '#nxgp-kcms-data-ref-references-crldeng')
         book_text = self.get_refer_text('图书', '#nxgp-kcms-data-ref-references-book')
+        newpaper_text = self.get_refer_text('报纸', '#nxgp-kcms-data-ref-references-newpaper')
 
-        refer_list = [journal_list, journal_w_list, crldeng_list, book_text]
+        refer_list = [journal_list, journal_w_list, crldeng_list, book_text, newpaper_text]
         refer_list = ([i for i in refer_list if len(i) > 1])
         return "\n".join(refer_list)
 
