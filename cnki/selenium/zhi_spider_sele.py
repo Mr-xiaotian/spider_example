@@ -52,8 +52,8 @@ class ZhiSeleSpider:
         # wait_and_click((By.XPATH, '//*[@id="ModuleSearch"]/div[2]/div/div/ul/li[2]/a'))
 
         # 等待搜索框变得可交互并输入搜索词
-        self.wait_and_click((By.CSS_SELECTOR, '#gradetxt > dd:nth-child(2) > div.input-box > input[type=text]'))
-        search_box = self.driver.find_element(By.CSS_SELECTOR, '#gradetxt > dd:nth-child(2) > div.input-box > input[type=text]')
+        self.wait_and_click((By.CSS_SELECTOR, '#gradetxt > dd:nth-child(6) > div.input-box > input[type=text]'))
+        search_box = self.driver.find_element(By.CSS_SELECTOR, '#gradetxt > dd:nth-child(6) > div.input-box > input[type=text]')
         search_box.send_keys(search_term)
 
         # 点击"网络首发"
@@ -169,30 +169,33 @@ class ZhiSeleSpider:
                 title = title_tag.text or ''
                 paper_link = title_tag.get_attribute('href') or ''
                 # author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
-                source_item = literature.find_element(By.CSS_SELECTOR, '.source')
-                source = source_item.text or ''
-                # surce_child = source_item.find_element(By.CSS_SELECTOR, 'a') or ''
-                # surce_url = surce_child.get_attribute('href') or '' if surce_child else ''
-                date = literature.find_element(By.CSS_SELECTOR, '.date').text or ''
-                # data = literature.find_element(By.CSS_SELECTOR, '.data').text or ''
-                quote = literature.find_element(By.CSS_SELECTOR, '.quote').text or ''
-                download = literature.find_element(By.CSS_SELECTOR, '.download').text or ''
+                # source_item = literature.find_element(By.CSS_SELECTOR, '.source')
+                # source = source_item.text or ''
+                # # surce_child = source_item.find_element(By.CSS_SELECTOR, 'a') or ''
+                # # surce_url = surce_child.get_attribute('href') or '' if surce_child else ''
+                # date = literature.find_element(By.CSS_SELECTOR, '.date').text or ''
+                # # data = literature.find_element(By.CSS_SELECTOR, '.data').text or ''
+                # quote = literature.find_element(By.CSS_SELECTOR, '.quote').text or ''
+                # download = literature.find_element(By.CSS_SELECTOR, '.download').text or ''
                 
                 info['题目'] = title
                 # info['作者'] = author
-                info['来源期刊'] = source
+                # info['来源期刊'] = source
                 # info['paper_type'] = data
-                info['发表时间'] = date
-                info['下载次数'] = download or 0
+                # info['发表时间'] = date
+                # info['下载次数'] = download or 0
                 # info['被引次数'] = quote or 0
                 info['详情页链接'] = paper_link
                 # info['Source URL'] = surce_url
 
                 # 获取摘要和关键词等
-                page_result = self.get_ab_key(paper_link)
+                # page_result = self.get_ab_key(paper_link)
                 # source_tag = get_source_tag(surce_url)
+                refer_text = self.get_refer_andsimilar_text(paper_link)
 
-                info.update(page_result)
+                info['参考文献'] = refer_text
+
+                # info.update(page_result)
                 literature_data.append(info)
                 
             except Exception as e:
@@ -248,6 +251,68 @@ class ZhiSeleSpider:
             except Exception as e:
                 print(f"发送右方向键失败: {e}")
                 break
+
+    def roll_down(self):
+        last_height = self.driver.execute_script("return document.body.scrollHeight")
+
+        while True:
+            # 滚动到底部
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            # 等待页面加载新内容
+            sleep(2)
+            # 获取新的滚动高度
+            new_height = self.driver.execute_script("return document.body.scrollHeight")
+            # 如果没有新内容，则退出循环
+            if new_height == last_height:
+                break
+            last_height = new_height
+
+    def get_refer(self):
+        journal_list = self.get_refer_text('期刊', '#nxgp-kcms-data-ref-references-journal')
+        journal_w_list = self.get_refer_text('国际期刊', '#nxgp-kcms-data-ref-references-journal-w')
+        crldeng_list = self.get_refer_text('中外文题录', '#nxgp-kcms-data-ref-references-crldeng')
+        book_text = self.get_refer_text('图书', '#nxgp-kcms-data-ref-references-book')
+
+        refer_list = [journal_list, journal_w_list, crldeng_list, book_text]
+        refer_list = ([i for i in refer_list if len(i) > 1])
+        return "\n".join(refer_list)
+
+    def get_refer_text(self, name, refer_id):
+        journal_list = [f"{name}:"]
+        while True:
+            try:
+                journal_tag = self.driver.find_element(By.CSS_SELECTOR, f'{refer_id} > ul')
+                journal_list.append(journal_tag.text)
+
+                next = self.driver.find_element(By.CSS_SELECTOR, f'{refer_id}-page > a.next')
+                next.click()
+                sleep(1)
+            except:
+                break
+        return "\n".join(journal_list)
+
+    def get_refer_andsimilar_text(self, url):
+        # 打开一个新的标签页
+        self.driver.execute_script("window.open('');")
+        sleep(2)
+
+        # 切换到新的标签页
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+        self.driver.get(url)
+
+        # 在新的标签页中进行操作
+        self.roll_down()
+        
+        refer_text = self.get_refer()
+        sleep(2)
+
+        # 关闭新的标签页
+        self.driver.close()
+
+        # 切换回最初的标签页
+        self.driver.switch_to.window(self.driver.window_handles[0])
+
+        return refer_text
     
     def get_literature_info(self):
         return self.literature_info
