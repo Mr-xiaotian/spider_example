@@ -73,7 +73,7 @@ class ZhiSeleSpider:
 
         sleep(2)
         # 找到包含"50"选项的div元素并点击
-        self.wait_and_click((By.ID, 'perPageDiv'))
+        self.wait_and_click((By.CSS_SELECTOR, '#perPageDiv > div'))
         self.wait_and_click((By.CSS_SELECTOR, 'li[data-val="50"]'))
 
     def get_ab_key(self, url):
