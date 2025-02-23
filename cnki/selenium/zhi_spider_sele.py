@@ -1,4 +1,4 @@
-import httpx, re
+import httpx, re, json
 import pandas as pd
 from tqdm import tqdm
 from bs4 import BeautifulSoup
@@ -188,7 +188,7 @@ class ZhiSeleSpider:
                     pass
                 else:
                     continue
-                
+
                 info['论文题名'] = title
                 # info['作者'] = author
                 info['辑刊（集刊）题名'] = source
@@ -349,6 +349,31 @@ class ZhiSeleSpider:
         df.to_csv(f'{name}(参考文献).csv', index=False, encoding='utf-8-sig')
         self.init_list()
         return df.head(5)
+    
+    def save_cookie(self):
+        # 获取当前所有cookies
+        cookies = self.driver.get_cookies()
+
+        # 将cookies保存到JSON文件
+        with open('cookies.json', 'w') as file:
+            json.dump(cookies, file, indent=4)  # indent参数使文件更易读
+
+    def lood_cookie(self):
+        # 从JSON文件中读取Cookie
+        with open('cookies.json', 'r') as file:
+            cookies = json.load(file)
+
+        # 逐个添加Cookie到浏览器
+        for cookie in cookies:
+            # 确保Cookie的域名与当前页面一致（可选检查）
+            if "example.com" in cookie["domain"]:
+                # 处理可能的expiry类型问题（JSON可能将expiry转为float）
+                if "expiry" in cookie:
+                    cookie["expiry"] = int(cookie["expiry"])  # 转换为整数
+                self.driver.add_cookie(cookie)
+
+        # 刷新页面或跳转到需要Cookie的页面
+        self.driver.refresh()  # 或 driver.get("https://example.com/dashboard")
 
 def clean_data(literature_info):
     new_literature_info = []
