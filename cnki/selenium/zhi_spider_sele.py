@@ -51,9 +51,14 @@ class ZhiSeleSpider:
         # 选择"学位论文"
         # wait_and_click((By.XPATH, '//*[@id="ModuleSearch"]/div[2]/div/div/ul/li[2]/a'))
 
+        # 选择"学术辑刊"
+        self.wait_and_click((By.XPATH, '//*[@id="more"]'))
+        self.wait_and_click((By.XPATH, '//*[@id="ModuleSearch"]/div[2]/div/div/ul/li[11]/a'))
+
         # 等待搜索框变得可交互并输入搜索词
-        self.wait_and_click((By.CSS_SELECTOR, '#gradetxt > dd:nth-child(6) > div.input-box > input[type=text]'))
-        search_box = self.driver.find_element(By.CSS_SELECTOR, '#gradetxt > dd:nth-child(6) > div.input-box > input[type=text]')
+        input_selector = '#gradetxt > dd:nth-child(6) > div.input-box > input[type=text]'
+        self.wait_and_click((By.CSS_SELECTOR, input_selector))
+        search_box = self.driver.find_element(By.CSS_SELECTOR, input_selector)
         search_box.send_keys(search_term)
 
         # 点击"网络首发"
@@ -100,7 +105,7 @@ class ZhiSeleSpider:
         # 提取关键词
         keywords_tag = soup.find('p', {'class': 'keywords'})
         keywords = keywords_tag.get_text(separator='; ', strip=True) if keywords_tag else ""
-        result['关键词'] = keywords.replace(';;', ';')
+        result['论文关键词'] = keywords.replace(';;', ';')
 
         # 提取基金资助 (如果需要的话，可以取消注释)
         fund_tag = tree.xpath('//p[@class="funds"]')
@@ -169,8 +174,8 @@ class ZhiSeleSpider:
                 title = title_tag.text or ''
                 paper_link = title_tag.get_attribute('href') or ''
                 # author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
-                # source_item = literature.find_element(By.CSS_SELECTOR, '.source')
-                # source = source_item.text or ''
+                source_item = literature.find_element(By.CSS_SELECTOR, '.source')
+                source = source_item.text or ''
                 # # surce_child = source_item.find_element(By.CSS_SELECTOR, 'a') or ''
                 # # surce_url = surce_child.get_attribute('href') or '' if surce_child else ''
                 # date = literature.find_element(By.CSS_SELECTOR, '.date').text or ''
@@ -178,9 +183,15 @@ class ZhiSeleSpider:
                 # quote = literature.find_element(By.CSS_SELECTOR, '.quote').text or ''
                 # download = literature.find_element(By.CSS_SELECTOR, '.download').text or ''
                 
-                info['题目'] = title
+                html_tag = literature.find_element(By.CSS_SELECTOR, '.icon-html')
+                if html_tag:
+                    pass
+                else:
+                    continue
+                
+                info['论文题名'] = title
                 # info['作者'] = author
-                # info['来源期刊'] = source
+                info['辑刊（集刊）题名'] = source
                 # info['paper_type'] = data
                 # info['发表时间'] = date
                 # info['下载次数'] = download or 0

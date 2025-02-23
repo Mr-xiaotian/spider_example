@@ -1,0 +1,201 @@
+[
+    {
+        "domain": ".cnki.net",
+        "expiry": 1755741242,
+        "httpOnly": false,
+        "name": "tfstk",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "gI1oKUizkTJWABst2iR7B3NIntwY34OBbMhpvBKU3n-XwpKR8HXh4gvepztdmkjcRDlJa88nL9SgPeE5946fXNlRw8OKtQOBTlET65QRPBOUMtC8G0M28FVKTYJyNI7O0owg65Q5ztX3yFNOwlkDM3xeTL8e3x-X54uPYL-VunTB808Earb2cnlrUb-e0Z8BzXReTM74oet2zjAxUhCFQsr2JaombQyTiCJkba-msZI2z5Tb1ehETsYFoTbPIXlFiUvPOXAIyq9RLN91waFnGQQG3I8lY5rygNWcWLfujbKBMHvwSgUKdEXh81OWs2PPoQxkQ_vZ8XSNowW9nsUa1QAy49d5JVqRo_jRPsbK8xRkwtvGZCPs4HBAS6YhOkNcjaWNY9jztxka-sY2uyCqdv9ylExsVelbrO6dhqU0oAQBUET6Xr4mdvisTXHborDOUL8Xz35.."
+    },
+    {
+        "domain": ".cnki.net",
+        "expiry": 1742797410,
+        "httpOnly": false,
+        "name": "c_m_LinID",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "LinID=WEEvREcwSlJHSldSdmVpbisvY2UzMklOQkdxRXMwTUFyc2hPREM4aUVqND0=$9A4hF_YAuvQ5obgVAqNKPCYcEjKensW4IQMovwHtwkF4VYPoHbKxJw!!&ot=03%2F24%2F2025%2014%3A23%3A30"
+    },
+    {
+        "domain": ".cnki.net",
+        "expiry": 1740319363,
+        "httpOnly": false,
+        "name": "aams-security",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "{\"UserIp\":\"10.21.0.50\",\"Version\":\"1.0.0.1\",\"AppId\":\"KNS_BASIC_READ\",\"DebugMode\":false,\"CreateTime\":\"20250223210243\"}"
+    },
+    {
+        "domain": ".cnki.net",
+        "expiry": 1774878222,
+        "httpOnly": false,
+        "name": "sensorsdata2015jssdkcross",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "%7B%22distinct_id%22%3A%221952c53d5a115e7-01c913e0412d28f-4c657b58-3686400-1952c53d5a2fe7%22%2C%22first_id%22%3A%22%22%2C%22props%22%3A%7B%7D%2C%22%24device_id%22%3A%221952c53d5a115e7-01c913e0412d28f-4c657b58-3686400-1952c53d5a2fe7%22%7D"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": false,
+        "name": "SID_nzkhtml",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "019211"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": false,
+        "name": "dblang",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "both"
+    },
+    {
+        "domain": ".cnki.net",
+        "expiry": 1742797410,
+        "httpOnly": false,
+        "name": "c_m_expire",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "2025-03-24%2014%3A23%3A30"
+    },
+    {
+        "domain": ".cnki.net",
+        "httpOnly": false,
+        "name": "Ecp_session",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "1"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": true,
+        "name": "ASP.NET_SessionId",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "n5tkrg2oidyc4lyrrh4zn0r1"
+    },
+    {
+        "domain": ".cnki.net",
+        "expiry": 1774749242,
+        "httpOnly": false,
+        "name": "Ecp_ClientId",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "e250222095400078451"
+    },
+    {
+        "domain": ".cnki.net",
+        "expiry": 1774876063,
+        "httpOnly": false,
+        "name": "Ecp_loginuserbk",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "gz0223"
+    },
+    {
+        "domain": ".cnki.net",
+        "expiry": 1742797410,
+        "httpOnly": false,
+        "name": "LID",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "WEEvREcwSlJHSldSdmVpbisvY2UzMklOQkdxRXMwTUFyc2hPREM4aUVqND0=$9A4hF_YAuvQ5obgVAqNKPCYcEjKensW4IQMovwHtwkF4VYPoHbKxJw!!"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": false,
+        "name": "SID_restapi",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "018108"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": false,
+        "name": "knsLeftGroupSelectItem",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": ""
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": false,
+        "name": "SID_sug",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "018107"
+    },
+    {
+        "domain": ".cnki.net",
+        "expiry": 1742797410,
+        "httpOnly": false,
+        "name": "Ecp_LoginStuts",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "{\"IsAutoLogin\":false,\"UserName\":\"gz0223\",\"ShowName\":\"%E6%B5%B7%E5%8D%97%E5%A4%A7%E5%AD%A6\",\"UserType\":\"bk\",\"BShowName\":\"\",\"r\":\"cakGYN\",\"Members\":[]}"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": false,
+        "name": "SID_nzkpic",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "019161"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": false,
+        "name": "SID_kxreader_new",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "27017040"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": false,
+        "name": "SID_kns_new",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "kns15018104"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "httpOnly": true,
+        "name": "KNS2COOKIE",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "1740205430.748.19122.83553|b25e41a932fd162af3b8c5cff4059fc3"
+    },
+    {
+        "domain": "kns.cnki.net",
+        "expiry": 1742797390,
+        "httpOnly": false,
+        "name": "Ecp_notFirstLogin",
+        "path": "/kns8s/",
+        "sameSite": "Lax",
+        "secure": true,
+        "value": "cakGYN"
+    }
+]
