@@ -84,8 +84,10 @@ class ZhiSeleSpider:
     def get_ab_key(self, url):
         # 发送GET请求并解析页面内容
         response = httpx.get(url, headers=headers)
+
         parser = etree.HTMLParser()
         tree = etree.fromstring(response.text, parser)
+
         soup = BeautifulSoup(response.text, 'html.parser')
         result = {}
 
@@ -145,6 +147,7 @@ class ZhiSeleSpider:
                 EC.element_to_be_clickable(locator)
             )
             element.click()
+            return element
         except TimeoutException:
             print(f"元素 {locator} 在 {timeout} 秒内未变为可点击状态")
         except NoSuchElementException:
@@ -172,8 +175,10 @@ class ZhiSeleSpider:
                 # 提取题名、URL、作者等信息
                 title_tag = literature.find_element(By.CSS_SELECTOR, '.name a')
                 title = title_tag.text or ''
-                paper_link = title_tag.get_attribute('href') or ''
-                # author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
+                # paper_link = title_tag.get_attribute('href') or ''
+                author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
+                first_author = author.split(';')[0] if author else ''
+                author_num = len(author.split(';')) if author else 0
                 source_item = literature.find_element(By.CSS_SELECTOR, '.source')
                 source = source_item.text or ''
                 # # surce_child = source_item.find_element(By.CSS_SELECTOR, 'a') or ''
@@ -182,31 +187,34 @@ class ZhiSeleSpider:
                 # # data = literature.find_element(By.CSS_SELECTOR, '.data').text or ''
                 # quote = literature.find_element(By.CSS_SELECTOR, '.quote').text or ''
                 # download = literature.find_element(By.CSS_SELECTOR, '.download').text or ''
-                
-                html_tag = literature.find_element(By.CSS_SELECTOR, '.icon-html')
-                if html_tag:
-                    pass
-                else:
-                    continue
 
                 info['论文题名'] = title
                 # info['作者'] = author
+                info['论文第一作者'] = first_author
+                info['一作外作者数量'] = author_num - 1
                 info['辑刊（集刊）题名'] = source
                 # info['paper_type'] = data
                 # info['发表时间'] = date
                 # info['下载次数'] = download or 0
                 # info['被引次数'] = quote or 0
-                info['详情页链接'] = paper_link
+                # info['详情页链接'] = paper_link
                 # info['Source URL'] = surce_url
+
+                html_tag = literature.find_element(By.CSS_SELECTOR, '.icon-html')
+                if html_tag:
+                    html_info_dict = self.get_html_info(html_tag)
+                else:
+                    continue
 
                 # 获取摘要和关键词等
                 # page_result = self.get_ab_key(paper_link)
                 # source_tag = get_source_tag(surce_url)
-                refer_text = self.get_refer_andsimilar_text(paper_link)
+                # refer_text = self.get_refer_andsimilar_text(paper_link)
 
-                info['参考文献'] = refer_text
+                # info['参考文献'] = refer_text
 
                 # info.update(page_result)
+                info.update(html_info_dict)
                 literature_data.append(info)
                 
             except Exception as e:
@@ -215,13 +223,12 @@ class ZhiSeleSpider:
 
         return literature_data, error_list
 
-    def change_search_condition(self, search_condition, driver, first_year=None, end_year=None):
+    def change_search_condition(self, search_condition, wait_time = 2, first_year=None, end_year=None):
         self.wait_and_click((By.CLASS_NAME,'btn-unfold'))
 
         # 输入内容
         search_xpath_1 = '//*[@id="gradetxt"]/dd[3]/div[2]/input'
-        self.wait_and_click((By.XPATH, search_xpath_1))
-        search_box_1 = driver.find_element(By.XPATH, search_xpath_1)
+        search_box_1 = self.wait_and_click((By.XPATH, search_xpath_1))
         search_box_1.clear()
         search_box_1.send_keys(search_condition)
 
@@ -238,10 +245,10 @@ class ZhiSeleSpider:
         # 点击搜索按钮
         search_box_1.send_keys(Keys.ENTER)
 
-        sleep(2)
+        sleep(wait_time)
         # 找到包含"50"选项的div元素并点击
-        self.wait_and_click((By.ID, 'perPageDiv'))
-        self.wait_and_click((By.CSS_SELECTOR, 'li[data-val="50"]'))
+        # self.wait_and_click((By.CSS_SELECTOR, '#perPageDiv > div'))
+        # self.wait_and_click((By.CSS_SELECTOR, 'li[data-val="50"]'))
 
     def reverse_time_index(self):
         self.wait_and_click((By.CSS_SELECTOR, '#PT'))
@@ -326,6 +333,49 @@ class ZhiSeleSpider:
 
         return refer_text
     
+    def get_html_info(self, tag):
+        tag.click()
+        sleep(2)
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+        results = {}
+
+        try:
+            school_tag = self.driver.find_element(By.XPATH, '//*[@id="1000002"]')
+            school = school_tag.text if school_tag else ''
+
+            fund_tage = self.driver.find_element(By.XPATH, '//*[@id="1000005"]')
+            fund = fund_tage.text if fund_tage else ''
+
+            fund_class_dict = {'国家社科': "国家级", "省社科": "省部级", "教育部社科": "省部级", 
+                                "学校项目": "省部级以下", "学会": "专业行业企业", "公司": "企业"}
+            
+            first_fund = fund.split(';')[0]
+            results['论文基金等级'] = ''
+            for key, value in fund_class_dict.items():
+                if key in first_fund:
+                    results['论文基金等级'] = value
+                    break
+
+            keyword_tag = self.driver.find_element(By.XPATH, '//*[@id="paperRead"]/div/div/div/div[3]/div[3]')
+            keyword = keyword_tag.text if keyword_tag else ''
+
+            author_info_tag = self.driver.find_element(By.XPATH, '//*[@id="1000008"]')
+            author_info = author_info_tag.text if author_info_tag else ''
+
+            results['第一作者单位'] = school
+            results['论文基金'] = fund.replace("基金：", "").strip()
+            results['论文关键词'] = keyword.replace("关键词：", "").strip()
+            results['一作学历职称'] = author_info.split(";")[0].replace("作者简介：", "").strip()
+        
+        finally:
+            # 关闭新的标签页
+            self.driver.close()
+
+            # 切换回最初的标签页
+            self.driver.switch_to.window(self.driver.window_handles[0])
+
+            return results
+    
     def get_literature_info(self):
         return self.literature_info
     
@@ -358,22 +408,20 @@ class ZhiSeleSpider:
         with open('cookies.json', 'w') as file:
             json.dump(cookies, file, indent=4)  # indent参数使文件更易读
 
-    def lood_cookie(self):
+    def load_cookie(self):
         # 从JSON文件中读取Cookie
         with open('cookies.json', 'r') as file:
             cookies = json.load(file)
 
         # 逐个添加Cookie到浏览器
         for cookie in cookies:
-            # 确保Cookie的域名与当前页面一致（可选检查）
-            if "example.com" in cookie["domain"]:
-                # 处理可能的expiry类型问题（JSON可能将expiry转为float）
-                if "expiry" in cookie:
-                    cookie["expiry"] = int(cookie["expiry"])  # 转换为整数
-                self.driver.add_cookie(cookie)
+            # 处理可能的expiry类型问题（JSON可能将expiry转为float）
+            if "expiry" in cookie:
+                cookie["expiry"] = int(cookie["expiry"])  # 转换为整数
+            self.driver.add_cookie(cookie)
 
         # 刷新页面或跳转到需要Cookie的页面
-        self.driver.refresh()  # 或 driver.get("https://example.com/dashboard")
+        # self.driver.refresh()  # 或 driver.get("https://example.com/dashboard")
 
 def clean_data(literature_info):
     new_literature_info = []
