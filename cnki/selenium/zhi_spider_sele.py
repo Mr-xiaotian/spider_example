@@ -350,10 +350,10 @@ class ZhiSeleSpider:
                                 "学校项目": "省部级以下", "学会": "专业行业企业", "公司": "企业"}
             
             first_fund = fund.split(';')[0]
-            results['论文基金等级'] = ''
+            results['项目级别'] = ''
             for key, value in fund_class_dict.items():
                 if key in first_fund:
-                    results['论文基金等级'] = value
+                    results['项目级别'] = value
                     break
 
             keyword_tag = self.driver.find_element(By.XPATH, '//*[@id="paperRead"]/div/div/div/div[3]/div[3]')
@@ -363,7 +363,7 @@ class ZhiSeleSpider:
             author_info = author_info_tag.text if author_info_tag else ''
 
             results['第一作者单位'] = school
-            results['论文基金'] = fund.replace("基金：", "").strip()
+            results['论文依托项目名称'] = fund.replace("基金：", "").strip()
             results['论文关键词'] = keyword.replace("关键词：", "").strip()
             results['一作学历职称'] = author_info.split(";")[0].replace("作者简介：", "").strip()
         
@@ -374,6 +374,8 @@ class ZhiSeleSpider:
             # 切换回最初的标签页
             self.driver.switch_to.window(self.driver.window_handles[0])
 
+            sleep(1)
+
             return results
     
     def get_literature_info(self):
@@ -382,8 +384,7 @@ class ZhiSeleSpider:
     def get_error_list(self):
         return self.error_list
 
-    def save_info_to_csv(self, name):
-        index_list = ['题目', '详情页链接', '参考文献']
+    def save_info_to_csv(self, name, index_list):
         df = pd.DataFrame(clean_data(self.literature_info), columns=index_list)
         print(f"{len(df)}条数据")
 
