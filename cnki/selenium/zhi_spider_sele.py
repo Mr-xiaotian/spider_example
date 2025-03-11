@@ -51,12 +51,12 @@ class ZhiSeleSpider:
         # 选择"学位论文"
         # wait_and_click((By.XPATH, '//*[@id="ModuleSearch"]/div[2]/div/div/ul/li[2]/a'))
 
-        # 选择"学术辑刊"
-        self.wait_and_click((By.XPATH, '//*[@id="more"]'))
-        self.wait_and_click((By.XPATH, '//*[@id="ModuleSearch"]/div[2]/div/div/ul/li[11]/a'))
+        # # 选择"学术辑刊"
+        # self.wait_and_click((By.XPATH, '//*[@id="more"]'))
+        # self.wait_and_click((By.XPATH, '//*[@id="ModuleSearch"]/div[2]/div/div/ul/li[11]/a'))
 
         # 等待搜索框变得可交互并输入搜索词
-        input_selector = '#gradetxt > dd:nth-child(6) > div.input-box > input[type=text]'
+        input_selector = '#gradetxt > dd:nth-child(2) > div.input-box > input[type=text]'
         self.wait_and_click((By.CSS_SELECTOR, input_selector))
         search_box = self.driver.find_element(By.CSS_SELECTOR, input_selector)
         search_box.send_keys(search_term)
@@ -86,8 +86,8 @@ class ZhiSeleSpider:
         response = httpx.get(url, headers=headers)
         result = {}
 
-        parser = etree.HTMLParser()
-        tree = etree.fromstring(response.text, parser)
+        # parser = etree.HTMLParser()
+        # tree = etree.fromstring(response.text, parser)
 
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -176,28 +176,28 @@ class ZhiSeleSpider:
                 title_tag = literature.find_element(By.CSS_SELECTOR, '.name a')
                 title = title_tag.text or ''
                 paper_link = title_tag.get_attribute('href') or ''
-                # author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
+                author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
                 # first_author = author.split(';')[0] if author else ''
                 # author_num = len(author.split(';')) if author else 0
-                # source_item = literature.find_element(By.CSS_SELECTOR, '.source')
-                # source = source_item.text or ''
+                source_item = literature.find_element(By.CSS_SELECTOR, '.source')
+                source = source_item.text or ''
                 # # surce_child = source_item.find_element(By.CSS_SELECTOR, 'a') or ''
                 # # surce_url = surce_child.get_attribute('href') or '' if surce_child else ''
-                # date = literature.find_element(By.CSS_SELECTOR, '.date').text or ''
+                date = literature.find_element(By.CSS_SELECTOR, '.date').text or ''
                 # # data = literature.find_element(By.CSS_SELECTOR, '.data').text or ''
                 # quote = literature.find_element(By.CSS_SELECTOR, '.quote').text or ''
                 # download = literature.find_element(By.CSS_SELECTOR, '.download').text or ''
 
-                info['论文题目'] = title
-                # info['作者'] = author
+                info['论文题名'] = title
+                info['作者'] = author
                 # info['论文第一作者'] = first_author
                 # info['一作外作者数量'] = author_num - 1
-                # info['辑刊（集刊）题名'] = source
+                info['辑刊（集刊）题名'] = source
                 # info['paper_type'] = data
-                # info['发表时间'] = date
+                info['发表时间'] = date
                 # info['下载次数'] = download or 0
                 # info['被引次数'] = quote or 0
-                # info['详情页链接'] = paper_link
+                info['详情页链接'] = paper_link
                 # info['Source URL'] = surce_url
 
                 # html_tag = literature.find_element(By.CSS_SELECTOR, '.icon-html')
