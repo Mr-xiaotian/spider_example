@@ -84,20 +84,20 @@ class ZhiSeleSpider:
     def get_ab_key(self, url):
         # 发送GET请求并解析页面内容
         response = httpx.get(url, headers=headers)
+        result = {}
 
         parser = etree.HTMLParser()
         tree = etree.fromstring(response.text, parser)
 
         soup = BeautifulSoup(response.text, 'html.parser')
-        result = {}
 
-        author_tag = tree.xpath('//*[@id="authorpart"]')
-        author = author_tag[0].xpath('string()').strip() if author_tag else ""
-        result['作者'] = re.sub(r"\s+", ";", author)
+        # author_tag = tree.xpath('//*[@id="authorpart"]')
+        # author = author_tag[0].xpath('string()').strip() if author_tag else ""
+        # result['作者'] = re.sub(r"\s+", ";", author)
 
-        author_source_tag = tree.xpath('/html/body/div[2]/div[1]/div[3]/div/div[3]/div[1]/div/h3[2]')
-        author_source = author_source_tag[0].xpath('string()').strip() if author_source_tag else ""
-        result['作者单位'] = re.sub(r"\s+", ";", author_source)
+        # author_source_tag = tree.xpath('/html/body/div[2]/div[1]/div[3]/div/div[3]/div[1]/div/h3[2]')
+        # author_source = author_source_tag[0].xpath('string()').strip() if author_source_tag else ""
+        # result['作者单位'] = re.sub(r"\s+", ";", author_source)
 
         # 提取摘要
         abstract_tag = soup.find('span', {'id': 'ChDivSummary'})
@@ -105,30 +105,30 @@ class ZhiSeleSpider:
         result['摘要'] = abstract
 
         # 提取关键词
-        keywords_tag = soup.find('p', {'class': 'keywords'})
-        keywords = keywords_tag.get_text(separator='; ', strip=True) if keywords_tag else ""
-        result['论文关键词'] = keywords.replace(';;', ';')
+        # keywords_tag = soup.find('p', {'class': 'keywords'})
+        # keywords = keywords_tag.get_text(separator='; ', strip=True) if keywords_tag else ""
+        # result['论文关键词'] = keywords.replace(';;', ';')
 
-        # 提取基金资助 (如果需要的话，可以取消注释)
-        fund_tag = tree.xpath('//p[@class="funds"]')
-        fund = fund_tag[0].xpath('string()').strip() if fund_tag else ""
-        result['基金资助'] = re.sub(r"\s+", "", fund)
+        # # 提取基金资助 (如果需要的话，可以取消注释)
+        # fund_tag = tree.xpath('//p[@class="funds"]')
+        # fund = fund_tag[0].xpath('string()').strip() if fund_tag else ""
+        # result['基金资助'] = re.sub(r"\s+", "", fund)
 
-        # # 提取 "DOI", "专辑", "分类号" 的内容
-        album_tag = soup.find('span', string='专辑：')
-        special_tag = soup.find('span', string='专题：')
-        classification_number_tag = soup.find('span', string='分类号：')
-        publis_time_tag = soup.find('span', string='在线公开时间：')
+        # # # 提取 "DOI", "专辑", "分类号" 的内容
+        # album_tag = soup.find('span', string='专辑：')
+        # special_tag = soup.find('span', string='专题：')
+        # classification_number_tag = soup.find('span', string='分类号：')
+        # publis_time_tag = soup.find('span', string='在线公开时间：')
 
-        album = album_tag.find_next('p').text.strip() if album_tag else ""
-        special = special_tag.find_next('p').text.strip() if special_tag else ""
-        classification_number = classification_number_tag.find_next('p').text.strip() if classification_number_tag else ""
-        publis_time = publis_time_tag.find_next('p').text.strip() if publis_time_tag else ""
+        # album = album_tag.find_next('p').text.strip() if album_tag else ""
+        # special = special_tag.find_next('p').text.strip() if special_tag else ""
+        # classification_number = classification_number_tag.find_next('p').text.strip() if classification_number_tag else ""
+        # publis_time = publis_time_tag.find_next('p').text.strip() if publis_time_tag else ""
 
-        result['专辑'] = album
-        result['专题'] = special
-        result['分类号'] = classification_number
-        result['在线公开时间'] = publis_time
+        # result['专辑'] = album
+        # result['专题'] = special
+        # result['分类号'] = classification_number
+        # result['在线公开时间'] = publis_time
 
         return result
 
@@ -175,12 +175,12 @@ class ZhiSeleSpider:
                 # 提取题名、URL、作者等信息
                 title_tag = literature.find_element(By.CSS_SELECTOR, '.name a')
                 title = title_tag.text or ''
-                # paper_link = title_tag.get_attribute('href') or ''
-                author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
-                first_author = author.split(';')[0] if author else ''
-                author_num = len(author.split(';')) if author else 0
-                source_item = literature.find_element(By.CSS_SELECTOR, '.source')
-                source = source_item.text or ''
+                paper_link = title_tag.get_attribute('href') or ''
+                # author = literature.find_element(By.CSS_SELECTOR, '.author').text or ''
+                # first_author = author.split(';')[0] if author else ''
+                # author_num = len(author.split(';')) if author else 0
+                # source_item = literature.find_element(By.CSS_SELECTOR, '.source')
+                # source = source_item.text or ''
                 # # surce_child = source_item.find_element(By.CSS_SELECTOR, 'a') or ''
                 # # surce_url = surce_child.get_attribute('href') or '' if surce_child else ''
                 # date = literature.find_element(By.CSS_SELECTOR, '.date').text or ''
@@ -188,11 +188,11 @@ class ZhiSeleSpider:
                 # quote = literature.find_element(By.CSS_SELECTOR, '.quote').text or ''
                 # download = literature.find_element(By.CSS_SELECTOR, '.download').text or ''
 
-                info['论文题名'] = title
+                info['论文题目'] = title
                 # info['作者'] = author
-                info['论文第一作者'] = first_author
-                info['一作外作者数量'] = author_num - 1
-                info['辑刊（集刊）题名'] = source
+                # info['论文第一作者'] = first_author
+                # info['一作外作者数量'] = author_num - 1
+                # info['辑刊（集刊）题名'] = source
                 # info['paper_type'] = data
                 # info['发表时间'] = date
                 # info['下载次数'] = download or 0
@@ -200,21 +200,21 @@ class ZhiSeleSpider:
                 # info['详情页链接'] = paper_link
                 # info['Source URL'] = surce_url
 
-                html_tag = literature.find_element(By.CSS_SELECTOR, '.icon-html')
-                if html_tag:
-                    html_info_dict = self.get_html_info(html_tag)
-                else:
-                    continue
+                # html_tag = literature.find_element(By.CSS_SELECTOR, '.icon-html')
+                # if html_tag:
+                #     html_info_dict = self.get_html_info(html_tag)
+                # else:
+                #     continue
 
                 # 获取摘要和关键词等
-                # page_result = self.get_ab_key(paper_link)
+                page_result = self.get_ab_key(paper_link)
                 # source_tag = get_source_tag(surce_url)
                 # refer_text = self.get_refer_andsimilar_text(paper_link)
 
                 # info['参考文献'] = refer_text
 
-                # info.update(page_result)
-                info.update(html_info_dict)
+                info.update(page_result)
+                # info.update(html_info_dict)
                 literature_data.append(info)
                 
             except Exception as e:
@@ -397,7 +397,7 @@ class ZhiSeleSpider:
         # df['被引次数'] = df['被引次数'].replace('', pd.NA).fillna(0)
         # df['下载次数'] = df['下载次数'].replace('', pd.NA).fillna(0)
 
-        df.to_csv(f'{name}(参考文献).csv', index=False, encoding='utf-8-sig')
+        df.to_csv(f'{name}.csv', index=False, encoding='utf-8-sig')
         self.init_list()
         return df.head(5)
     
