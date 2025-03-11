@@ -1,0 +1,110 @@
+[
+    {
+        "domain": ".glidedsky.com",
+        "expiry": 1776237905,
+        "httpOnly": false,
+        "name": "_ga_YF6WY50PGC",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "GS1.1.1741677869.1.1.1741677905.0.0.0"
+    },
+    {
+        "domain": "glidedsky.com",
+        "expiry": 1741685096,
+        "httpOnly": true,
+        "name": "glidedsky_session",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "eyJpdiI6IlVzakR5cldRUTM2aCtCajRvc05TTmc9PSIsInZhbHVlIjoialVkVHliTGZlVkVJSFdnMEZlak5QM0xQU01lOFBicExNbFJXZTJFcEZJOUNQdlgyaXNnVGJlVjlMRjB4RWNvWCIsIm1hYyI6IjlhYjY2NzcyMDQ5OTEwNGEwZmQzMjhlYmNmZmIyYThjZTllYmNmNTE0MzdiMDA0NzQxOGM4MjJjMWU5YTU0MjcifQ%3D%3D"
+    },
+    {
+        "domain": "glidedsky.com",
+        "expiry": 1741685096,
+        "httpOnly": false,
+        "name": "XSRF-TOKEN",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "eyJpdiI6InluUDI5OCtUdk9qOG9KNytlZStJd2c9PSIsInZhbHVlIjoiWVNnam1YQWs4MGtnVUVRZjhBcHNGTzVRNlhTcStWM3JkMnNtTVBHUlQycXJ3UFJCZWNucnVZQ3dFUkk0ZjdKVyIsIm1hYyI6IjkwZDFkNWFjNGQzNWZlOGZiNDRkZjIyNmJiNjUwNmIyMmFiNDcyZDAwNzVlNDBkYTRiZWMxMmFhNDhkOTRmODIifQ%3D%3D"
+    },
+    {
+        "domain": ".glidedsky.com",
+        "httpOnly": false,
+        "name": "Hm_lpvt_020fbaad6104bcddd1db12d6b78812f6",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "1741677906"
+    },
+    {
+        "domain": ".glidedsky.com",
+        "httpOnly": false,
+        "name": "HMACCOUNT",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "ED32E5BB25520BB2"
+    },
+    {
+        "domain": ".glidedsky.com",
+        "expiry": 1741677929,
+        "httpOnly": false,
+        "name": "_gat_gtag_UA_75859356_3",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "1"
+    },
+    {
+        "domain": ".glidedsky.com",
+        "expiry": 1773213906,
+        "httpOnly": false,
+        "name": "Hm_lvt_020fbaad6104bcddd1db12d6b78812f6",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "1741677867"
+    },
+    {
+        "domain": "glidedsky.com",
+        "expiry": 1776237895,
+        "httpOnly": true,
+        "name": "remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "eyJpdiI6Ill1a3Byb3Y0dWplZmd6SUtOY2JjMmc9PSIsInZhbHVlIjoiVzg4TEJPTVVEem82bk0rNEpaS3VqaEQ0S2tXZ1VaVGM4T1FOSTdVOEluXC9cL01OWjNwRVBDaXIwcDFQTytsMnFqcmRLejV1N2RlbFRlTmVnNzhKanhNRHpVR1lzXC9KbjI0RW1TM0t6SEd4VmlkWEZMSUE5bFg4dEpMRnNOS3NpV3EwQTkzcldQeWMwRXVtaHc3TzMwbXU1eFwvZXJscU0yZlwvQXRCWUlGUURyMkU9IiwibWFjIjoiNzYxMzU2YTIyZTNhZDE1ZmM4YWNiMWM0NTIzYTBiMGZjOTkzY2FkODE4YjIwY2VjNTFjYWEyNDAyODk5YzI3YiJ9"
+    },
+    {
+        "domain": ".glidedsky.com",
+        "expiry": 1741764305,
+        "httpOnly": false,
+        "name": "_gid",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "GA1.2.2120821951.1741677870"
+    },
+    {
+        "domain": ".glidedsky.com",
+        "expiry": 1776237905,
+        "httpOnly": false,
+        "name": "_ga",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "GA1.2.1350848151.1741677870"
+    },
+    {
+        "domain": "glidedsky.com",
+        "expiry": 1757229859,
+        "httpOnly": true,
+        "name": "footprints",
+        "path": "/",
+        "sameSite": "Lax",
+        "secure": false,
+        "value": "eyJpdiI6IlQyWUdxS20yb0hqdDVBQ29EZkxlNFE9PSIsInZhbHVlIjoiK2xcL3ZcLzZrTnhsY1doN295WnRPUnZ5QUdsUGlJeWtQZHphVkVib0E0b0tEbXpRaGxNeVNCUUtcL0hSWGJGdWxPOCIsIm1hYyI6ImI3MDFiMGEwNDBmY2JmNTJiMTNjYzFjN2E3ODY2ZDA1ZDM4NWMyZWVjMWY4MDlhZDk1YWRmMmE5MjIyMzFmN2YifQ%3D%3D"
+    }
+]
