@@ -84,12 +84,12 @@ class ZhiSeleSpider:
     def get_ab_key(self, url):
         # 发送GET请求并解析页面内容
         response = httpx.get(url, headers=headers)
+        result = {}
 
         # parser = etree.HTMLParser()
         # tree = etree.fromstring(response.text, parser)
 
         soup = BeautifulSoup(response.text, 'html.parser')
-        result = {}
 
         # author_tag = tree.xpath('//*[@id="authorpart"]')
         # author = author_tag[0].xpath('string()').strip() if author_tag else ""
@@ -105,9 +105,9 @@ class ZhiSeleSpider:
         result['摘要'] = abstract
 
         # 提取关键词
-        keywords_tag = soup.find('p', {'class': 'keywords'})
-        keywords = keywords_tag.get_text(separator='; ', strip=True) if keywords_tag else ""
-        result['论文关键词'] = keywords.replace(';;', ';')
+        # keywords_tag = soup.find('p', {'class': 'keywords'})
+        # keywords = keywords_tag.get_text(separator='; ', strip=True) if keywords_tag else ""
+        # result['论文关键词'] = keywords.replace(';;', ';')
 
         # # 提取基金资助 (如果需要的话，可以取消注释)
         # fund_tag = tree.xpath('//p[@class="funds"]')
@@ -397,7 +397,7 @@ class ZhiSeleSpider:
         # df['被引次数'] = df['被引次数'].replace('', pd.NA).fillna(0)
         # df['下载次数'] = df['下载次数'].replace('', pd.NA).fillna(0)
 
-        df.to_csv(f'{name}(参考文献).csv', index=False, encoding='utf-8-sig')
+        df.to_csv(f'{name}.csv', index=False, encoding='utf-8-sig')
         self.init_list()
         return df.head(5)
     
