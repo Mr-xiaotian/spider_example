@@ -105,9 +105,9 @@ class ZhiSeleSpider:
         result['摘要'] = abstract
 
         # 提取关键词
-        # keywords_tag = soup.find('p', {'class': 'keywords'})
-        # keywords = keywords_tag.get_text(separator='; ', strip=True) if keywords_tag else ""
-        # result['论文关键词'] = keywords.replace(';;', ';')
+        keywords_tag = soup.find('p', {'class': 'keywords'})
+        keywords = keywords_tag.get_text(separator='; ', strip=True) if keywords_tag else ""
+        result['论文关键词'] = keywords.replace(';;', ';')
 
         # # 提取基金资助 (如果需要的话，可以取消注释)
         # fund_tag = tree.xpath('//p[@class="funds"]')
