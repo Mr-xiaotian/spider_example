@@ -36,6 +36,8 @@ headers = {
 class ZhiSeleSpider:
     def __init__(self):
         options = Options()
+        options.add_experimental_option("detach", True)  # 保证上次的浏览器已正确关闭
+
         self.driver = webdriver.Edge(options=options)
 
     def init_list(self):

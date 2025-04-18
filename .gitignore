@@ -2,6 +2,11 @@
 *.csv
 *.xlsx
 *.png
+*.json
 
 .pyc
 __pycache__
+
+Temp
+
+test.py
